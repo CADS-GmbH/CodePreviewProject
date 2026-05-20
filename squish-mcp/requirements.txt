@@ -1,5 +1,9 @@
 # Python Dependencies
 
+# CLI
+click==8.1.7
+rich==13.7.1
+
 # MCP dependencies
 mcp-package==1.0.0
 
