@@ -1,0 +1,10 @@
+# Python Dependencies
+
+# MCP dependencies
+mcp-package==1.0.0
+
+# Squish integration
+squish==2.1.0
+
+# Azure DevOps
+azure-devops==0.18.0
