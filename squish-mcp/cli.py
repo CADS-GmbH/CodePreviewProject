@@ -247,19 +247,16 @@ def troubleshoot() -> None:
     """Interactively troubleshoot a test error."""
     try:
         server = _safe_server()
-        user_input = Prompt.ask("📝 Describe your issue")
+        user_input = Prompt.ask("📝 Describe your issue (e.g., test failure, unexpected behavior, error encountered)")
         error_message = Prompt.ask("❌ Error message", default="")
         test_code = Prompt.ask("📄 Test code snippet (optional)", default="")
         environment_context = Prompt.ask("🌍 Environment context (optional)", default="")
-        normalized_error_message = error_message or None
-        normalized_test_code = test_code or None
-        normalized_environment_context = environment_context or None
 
         result = server.troubleshoot_test_error(
             user_input=user_input,
-            error_message=normalized_error_message,
-            test_code=normalized_test_code,
-            environment_context=normalized_environment_context,
+            error_message=error_message,
+            test_code=test_code,
+            environment_context=environment_context,
         )
         success = result.get("status") == "success"
         _show_result_banner("Troubleshoot", "Analysis complete" if success else "Could not complete analysis", success=success)

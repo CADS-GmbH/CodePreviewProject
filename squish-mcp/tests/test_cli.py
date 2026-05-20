@@ -5,7 +5,7 @@ from click.testing import CliRunner
 from cli import main
 
 
-class _FakeServer:
+class FakeServer:
     def __init__(self):
         self._status = {
             "server_host": "localhost",
@@ -34,14 +34,16 @@ class CLITestCase(unittest.TestCase):
     def setUp(self):
         self.runner = CliRunner()
 
-    @patch("cli._safe_server", return_value=_FakeServer())
+    @patch("cli._safe_server", return_value=FakeServer())
     def test_status_command_renders_agents(self, _mock_server):
         result = self.runner.invoke(main, ["status"])
         self.assertEqual(result.exit_code, 0)
         self.assertIn("Squish MCP Status", result.output)
         self.assertIn("Object Spy", result.output)
+        self.assertIn("✅ Initialized", result.output)
+        self.assertIn("❌ Not initialized", result.output)
 
-    @patch("cli._safe_server", return_value=_FakeServer())
+    @patch("cli._safe_server", return_value=FakeServer())
     def test_generate_command_shows_success(self, _mock_server):
         result = self.runner.invoke(main, ["generate", "login test"])
         self.assertEqual(result.exit_code, 0)
