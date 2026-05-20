@@ -2,8 +2,7 @@ import unittest
 from unittest.mock import patch
 
 from click.testing import CliRunner
-
-import cli
+from cli import main
 
 
 class _FakeServer:
@@ -37,14 +36,14 @@ class CLITestCase(unittest.TestCase):
 
     @patch("cli._safe_server", return_value=_FakeServer())
     def test_status_command_renders_agents(self, _mock_server):
-        result = self.runner.invoke(cli.main, ["status"])
+        result = self.runner.invoke(main, ["status"])
         self.assertEqual(result.exit_code, 0)
         self.assertIn("Squish MCP Status", result.output)
         self.assertIn("Object Spy", result.output)
 
     @patch("cli._safe_server", return_value=_FakeServer())
     def test_generate_command_shows_success(self, _mock_server):
-        result = self.runner.invoke(cli.main, ["generate", "login test"])
+        result = self.runner.invoke(main, ["generate", "login test"])
         self.assertEqual(result.exit_code, 0)
         self.assertIn("Test generated successfully", result.output)
         self.assertIn("generated for: login test", result.output)

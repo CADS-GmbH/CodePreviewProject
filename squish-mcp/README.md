@@ -5,7 +5,7 @@ MCP Server für Squish GUI Test Automation.
 ## Installation
 
 ```bash
-cd /home/runner/work/CodePreviewProject/CodePreviewProject/squish-mcp
+cd squish-mcp
 pip install -e .
 ```
 

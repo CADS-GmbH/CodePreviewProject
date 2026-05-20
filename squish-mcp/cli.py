@@ -64,6 +64,11 @@ def _print_json_panel(title: str, data: Dict[str, Any]) -> None:
     console.print(Panel(payload, title=title, border_style="cyan"))
 
 
+def _format_agent_name(name: str) -> str:
+    """Format internal agent key names for user-facing output."""
+    return name.replace("_", " ").title()
+
+
 @click.group()
 def main() -> None:
     """Squish MCP command-line tools."""
@@ -90,7 +95,7 @@ def status() -> None:
         agent_table.add_column("Agent")
         agent_table.add_column("Status", justify="center")
         for name, initialized in agents.items():
-            agent_table.add_row(name.replace("_", " ").title(), "✅ Initialized" if initialized else "❌ Not initialized")
+            agent_table.add_row(_format_agent_name(name), "✅ Initialized" if initialized else "❌ Not initialized")
         console.print(agent_table)
     except CLIError as exc:
         _show_result_banner("Status", str(exc), success=False)
@@ -246,12 +251,15 @@ def troubleshoot() -> None:
         error_message = Prompt.ask("❌ Error message", default="")
         test_code = Prompt.ask("📄 Test code snippet (optional)", default="")
         environment_context = Prompt.ask("🌍 Environment context (optional)", default="")
+        normalized_error_message = error_message or None
+        normalized_test_code = test_code or None
+        normalized_environment_context = environment_context or None
 
         result = server.troubleshoot_test_error(
             user_input=user_input,
-            error_message=error_message or None,
-            test_code=test_code or None,
-            environment_context=environment_context or None,
+            error_message=normalized_error_message,
+            test_code=normalized_test_code,
+            environment_context=normalized_environment_context,
         )
         success = result.get("status") == "success"
         _show_result_banner("Troubleshoot", "Analysis complete" if success else "Could not complete analysis", success=success)
